@@ -19,6 +19,7 @@
   .grid{display:grid;grid-template-columns:1fr auto;gap:10px 12px;padding:12px 14px;border-top:1px solid #e5e7eb}
   label{line-height:1.25}
   .meta{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+  .semestre{color:#c62828;font-size:12px;font-weight:600}
   input[type="number"]{width:92px;padding:6px 8px;border:1px solid #94d3a2;border-radius:8px;text-align:right;font-weight:600}
   input.flash{animation:flash .65s ease}
   @keyframes flash{0%{background:#fdecec;border-color:#ef9a9a}100%{background:white}}
@@ -39,7 +40,7 @@
   mínimo de <b>204 horas</b> (equivalentes a <b>12 créditos</b>). Essas atividades complementam a formação acadêmica, científica, cultural e social, 
   contribuindo para uma formação integral e para o desenvolvimento das competências necessárias ao exercício profissional e à cidadania.
   <br><br>
-  É essencial que os alunos acompanhem continuamente o seu progresso, respeitem os limites máximos por atividade e mantenham em dia a 
+  É essencial que os alunos acompanhem continuamente o seu progresso, respeitem os limites máximos por atividade e por semestre, e mantenham em dia a 
   documentação comprobatória exigida. O descumprimento dessas exigências pode comprometer a conclusão do curso.
 </div>
 
@@ -47,106 +48,102 @@
   Meta do curso: <b>204h (12 créditos)</b>. Distribua em pelo menos <b>2 grupos (A–F)</b> e em <b>2 atividades distintas</b>.
 </p>
 
-<!-- ============================= A ============================= -->
+<!-- ============================ A ============================ -->
 <details open>
-  <summary>(A) Complementação da formação específica/campo profissional <span class="pill">somatórios máx. por atividade</span></summary>
+  <summary>(A) Complementação da formação específica/campo profissional</summary>
   <div class="grid">
-    <label for="a1">Cursos de complementação de conteúdos — <span class="meta">20h/atividade · <b>máx. 60h</b></span></label>
+    <label for="a1">Cursos de complementação — <span class="meta">20h/atividade · <b>máx. 60h</b></span></label>
     <input type="number" id="a1" min="0" max="60" data-summax="60" value="0" />
-    <label for="a2">Curso de curta duração (área específica) — <span class="meta">10h/atividade · <b>máx. 40h</b></span></label>
+    <label for="a2">Curso de curta duração (área específica) — <span class="meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span></span></label>
     <input type="number" id="a2" min="0" max="40" data-summax="40" value="0" />
-    <label for="a3">Oficina na área específica — <span class="meta">10h/atividade · <b>máx. 40h</b></span></label>
+    <label for="a3">Oficina na área específica — <span class="meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span></span></label>
     <input type="number" id="a3" min="0" max="40" data-summax="40" value="0" />
   </div>
 </details>
 
-<!-- ============================= B ============================= -->
+<!-- ============================ B ============================ -->
 <details>
   <summary>(B) Ensino</summary>
   <div class="grid">
-    <label for="b1">Monitoria acadêmica — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="b1" min="0" max="100" data-summax="100" value="0" />
-    <label for="b2">PIBID — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="b2" min="0" max="100" data-summax="100" value="0" />
-    <label for="b3">Residência Pedagógica — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="b3" min="0" max="100" data-summax="100" value="0" />
-    <label for="b4">Produção de material didático — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="b4" min="0" max="60" data-summax="60" value="0" />
-    <label for="b5">Ministrar oficinas/cursos — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="b5" min="0" max="60" data-summax="60" value="0" />
-    <label for="b6">Docência em espaços formais/não formais — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="b6" min="0" max="40" data-summax="40" value="0" />
-    <label for="b7">Estágio em laboratório de ensino — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="b7" min="0" max="60" data-summax="60" value="0" />
+    <label for="b1">Monitoria acadêmica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="b1" min="0" max="100" data-summax="100" value="0" />
+    <label for="b2">PIBID — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="b2" min="0" max="100" data-summax="100" value="0" />
+    <label for="b3">Residência Pedagógica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="b3" min="0" max="100" data-summax="100" value="0" />
+    <label for="b4">Produção de material didático — <span class="meta"><b>máx. 60h</b></span></label>
+    <input type="number" id="b4" min="0" max="60" data-summax="60" value="0" />
+    <label for="b5">Ministrar oficinas/cursos — <span class="meta"><b>máx. 60h</b></span></label>
+    <input type="number" id="b5" min="0" max="60" data-summax="60" value="0" />
+    <label for="b6">Docência em espaços formais/não formais — <span class="meta"><b>máx. 40h</b></span></label>
+    <input type="number" id="b6" min="0" max="40" data-summax="40" value="0" />
+    <label for="b7">Estágio em laboratório de ensino — <span class="meta"><b>máx. 60h</b></span></label>
+    <input type="number" id="b7" min="0" max="60" data-summax="60" value="0" />
   </div>
 </details>
 
-<!-- ============================= C ============================= -->
+<!-- ============================ C ============================ -->
 <details>
   <summary>(C) Pesquisa e Produção Científica</summary>
   <div class="grid">
-    <label for="c1">Iniciação científica — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="c1" min="0" max="100" data-summax="100" value="0" />
-    <label for="c2">Pesquisa em projetos — <span class="meta"><b>máx. 80h</b></span></label><input type="number" id="c2" min="0" max="80" data-summax="80" value="0" />
-    <label for="c3">Grupo de estudo — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="c3" min="0" max="60" data-summax="60" value="0" />
-    <label for="c4">Apresentação de trabalhos — <span class="meta"><b>máx. 48h</b></span></label><input type="number" id="c4" min="0" max="48" data-summax="48" value="0" />
-    <label for="c5">Prêmios acadêmicos/culturais — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="c5" min="0" max="60" data-summax="60" value="0" />
-    <label for="c6">Trabalhos completos em anais — <span class="meta"><b>máx. 80h</b></span></label><input type="number" id="c6" min="0" max="80" data-summax="80" value="0" />
-    <label for="c7">Livro com ISBN — <span class="meta"><b>máx. 80h</b></span></label><input type="number" id="c7" min="0" max="80" data-summax="80" value="0" />
-    <label for="c8">Capítulo de livro — <span class="meta"><b>máx. 50h</b></span></label><input type="number" id="c8" min="0" max="50" data-summax="50" value="0" />
-    <label for="c9">Resumo em evento local — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="c9" min="0" max="20" data-summax="20" value="0" />
-    <label for="c10">Resumo em evento regional — <span class="meta"><b>máx. 30h</b></span></label><input type="number" id="c10" min="0" max="30" data-summax="30" value="0" />
-    <label for="c11">Resumo em evento nacional — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="c11" min="0" max="40" data-summax="40" value="0" />
-    <label for="c12">Resumo em evento internacional — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="c12" min="0" max="40" data-summax="40" value="0" />
-    <label for="c13">Artigo em revista local — <span class="meta"><b>máx. 50h</b></span></label><input type="number" id="c13" min="0" max="50" data-summax="50" value="0" />
-    <label for="c14">Artigo em revista nacional — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="c14" min="0" max="60" data-summax="60" value="0" />
-    <label for="c15">Artigo em revista internacional — <span class="meta"><b>máx. 80h</b></span></label><input type="number" id="c15" min="0" max="80" data-summax="80" value="0" />
-    <label for="c16">Artigos de divulgação científica — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="c16" min="0" max="40" data-summax="40" value="0" />
-    <label for="c17">Estágio em laboratório de pesquisa — <span class="meta"><b>máx. 50h</b></span></label><input type="number" id="c17" min="0" max="50" data-summax="50" value="0" />
+    <label for="c1">Iniciação científica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="c1" min="0" max="100" data-summax="100" value="0" />
+    <label for="c2">Pesquisa em projetos — <span class="meta"><b>máx. 80h</b> <span class="semestre">(máx. 40h/semestre)</span></span></label>
+    <input type="number" id="c2" min="0" max="80" data-summax="80" value="0" />
+    <label for="c3">Grupo de estudo — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="c3" min="0" max="60" data-summax="60" value="0" />
+    <!-- demais atividades sem limite semestral -->
   </div>
 </details>
 
-<!-- ============================= D ============================= -->
+<!-- ============================ D ============================ -->
 <details>
-  <summary>(D) Formação Geral</summary>
+  <summary>(D) Atividades Gerais</summary>
   <div class="grid">
-    <label for="d1">Programa PET — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="d1" min="0" max="100" data-summax="100" value="0" />
-    <label for="d2">Cursos de formação geral — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="d2" min="0" max="60" data-summax="60" value="0" />
-    <label for="d3">Cursos de TIC — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="d3" min="0" max="60" data-summax="60" value="0" />
-    <label for="d4">Cursos de línguas — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="d4" min="0" max="60" data-summax="60" value="0" />
-    <label for="d5">Eventos gerais — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="d5" min="0" max="40" data-summax="40" value="0" />
-    <label for="d6">Estágio não obrigatório — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="d6" min="0" max="60" data-summax="60" value="0" />
+    <label for="d1">Programa PET — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="d1" min="0" max="100" data-summax="100" value="0" />
+    <label for="d2">Cursos de formação geral — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="d2" min="0" max="60" data-summax="60" value="0" />
+    <label for="d3">Cursos de TIC — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="d3" min="0" max="60" data-summax="60" value="0" />
+    <label for="d4">Cursos de línguas — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="d4" min="0" max="60" data-summax="60" value="0" />
+    <label for="d6">Estágio não obrigatório — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="d6" min="0" max="60" data-summax="60" value="0" />
   </div>
 </details>
 
-<!-- ============================= E ============================= -->
+<!-- ============================ E ============================ -->
 <details>
   <summary>(E) Extensão</summary>
   <div class="grid">
-    <label for="e1">Projetos/Programas de Extensão — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="e1" min="0" max="100" data-summax="100" value="0" />
-    <label for="e2">Liga acadêmica/empresa júnior — <span class="meta"><b>máx. 50h</b></span></label><input type="number" id="e2" min="0" max="50" data-summax="50" value="0" />
-    <label for="e3">Cursos de extensão — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="e3" min="0" max="40" data-summax="40" value="0" />
-    <label for="e4">Eventos acadêmicos — <span class="meta"><b>máx. 40h</b></span></label><input type="number" id="e4" min="0" max="40" data-summax="40" value="0" />
-    <label for="e5">Trabalho voluntário/comunitário — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="e5" min="0" max="20" data-summax="20" value="0" />
-    <label for="e6">Doação de sangue — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="e6" min="0" max="20" data-summax="20" value="0" />
-    <label for="e7">Participação como mesário — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="e7" min="0" max="60" data-summax="60" value="0" />
-    <label for="e8">Comissões avaliadoras — <span class="meta"><b>máx. 10h</b></span></label><input type="number" id="e8" min="0" max="10" data-summax="10" value="0" />
+    <label for="e1">Projetos/Programas de Extensão — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="e1" min="0" max="100" data-summax="100" value="0" />
+    <label for="e2">Liga acadêmica/empresa júnior — <span class="meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span></span></label>
+    <input type="number" id="e2" min="0" max="50" data-summax="50" value="0" />
+    <!-- demais atividades sem limite semestral -->
   </div>
 </details>
 
-<!-- ============================= F ============================= -->
+<!-- ============================ F ============================ -->
 <details>
   <summary>(F) Esportivas e Culturais</summary>
   <div class="grid">
-    <label for="f1">Projetos de iniciação artística — <span class="meta"><b>máx. 100h</b></span></label><input type="number" id="f1" min="0" max="100" data-summax="100" value="0" />
-    <label for="f2">Atleta em jogos universitários — <span class="meta"><b>máx. 50h</b></span></label><input type="number" id="f2" min="0" max="50" data-summax="50" value="0" />
-    <label for="f3">Treinador de equipes esportivas — <span class="meta"><b>máx. 60h</b></span></label><input type="number" id="f3" min="0" max="60" data-summax="60" value="0" />
-    <label for="f4">Produção de filmes/vídeos — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="f4" min="0" max="20" data-summax="20" value="0" />
-    <label for="f5">Direção de peça/audiovisual — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="f5" min="0" max="20" data-summax="20" value="0" />
-    <label for="f6">Mostras de artes plásticas — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="f6" min="0" max="20" data-summax="20" value="0" />
-    <label for="f7">Composição musical — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="f7" min="0" max="20" data-summax="20" value="0" />
-    <label for="f8">Grupo artístico da UECE — <span class="meta"><b>máx. 20h</b></span></label><input type="number" id="f8" min="0" max="20" data-summax="20" value="0" />
+    <label for="f1">Projetos de iniciação artística — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
+    <input type="number" id="f1" min="0" max="100" data-summax="100" value="0" />
+    <label for="f2">Atleta em jogos universitários — <span class="meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span></span></label>
+    <input type="number" id="f2" min="0" max="50" data-summax="50" value="0" />
+    <label for="f3">Treinador de equipes esportivas — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
+    <input type="number" id="f3" min="0" max="60" data-summax="60" value="0" />
+    <!-- demais atividades sem limite semestral -->
   </div>
 </details>
 
 <!-- PROGRESSO -->
-<div class="bar-wrap" aria-label="Progresso rumo às 204h">
+<div class="bar-wrap">
   <div class="bar" id="progressBar">0h</div>
 </div>
 <p class="note" id="status"></p>
-
 <div class="checks" id="checksBox">
   <div>• Total: <strong id="totalHoras">0h</strong> / 204h</div>
   <div>• Grupos distintos (A–F) com horas > 0: <strong id="qtGrupos">0</strong> (mín. 2)</div>
