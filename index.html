@@ -4,221 +4,1385 @@
 <meta charset="UTF-8" />
 <title>Simulador de ACCs – Matemática/UECE</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<!-- Adicionando a biblioteca jsPDF -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
 <style>
   :root{
-    --ok:#1b5e20; --soft:#e8f5e9; --warn:#c62828; --muted:#6b7280;
+    --verde-principal: #4CAF50;
+    --verde-claro: #81C784;
+    --verde-escuro: #2E7D32;
+    --verde-pastel: #E8F5E9;
+    --verde-agua: #A5D6A7;
+    --verde-limao: #C8E6C9;
+    --branco: #FFFFFF;
+    --cinza-claro: #F5F5F5;
+    --cinza-medio: #9E9E9E;
+    --cinza-escuro: #424242;
+    --azul-suave: #64B5F6;
+    --laranja-suave: #FFB74D;
   }
-  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu; margin:24px; background:#f7faf7; color:#0f172a;}
-  h1{margin:0 0 8px 0; font-size:clamp(20px,3.2vw,28px);}
-  .intro{background:#ffffff;border:1px solid #a5d6a7;padding:14px 16px;border-radius:10px;line-height:1.5;margin-bottom:18px;box-shadow:0 2px 8px rgba(0,0,0,.04);}
-  .lead{background:var(--soft); border:1px solid #a5d6a7; padding:12px 14px; border-radius:10px; line-height:1.4;}
-  details{background:#fff;border-radius:12px;margin:12px 0;box-shadow:0 2px 8px rgba(0,0,0,.06);border:1px solid #e5e7eb}
-  summary{cursor:pointer;padding:12px 14px;font-weight:700;color:#14532d;list-style:none;display:flex;align-items:center;gap:8px}
-  summary::before{content:"▸";transition:.2s; color:#065f46}
-  details[open] summary::before{transform:rotate(90deg)}
-  .grid{display:grid;grid-template-columns:1fr auto;gap:10px 12px;padding:12px 14px;border-top:1px solid #e5e7eb}
-  label{line-height:1.25}
-  .meta{display:block;color:var(--muted);font-size:12px;margin-top:2px}
-  .semestre{color:#c62828;font-size:12px;font-weight:600}
-  input[type="number"]{width:92px;padding:6px 8px;border:1px solid #94d3a2;border-radius:8px;text-align:right;font-weight:600}
-  input.flash{animation:flash .65s ease}
-  @keyframes flash{0%{background:#fdecec;border-color:#ef9a9a}100%{background:white}}
-  .bar-wrap{height:32px;border-radius:14px;background:#e5e7eb;margin:18px 0 8px 0;overflow:hidden}
-  .bar{height:100%;width:0%;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;transition:width .35s ease, background .35s ease}
-  .note{font-size:13px;color:#334155}
-  .checks{margin-top:14px;border:1px dashed #a7f3d0;background:#ecfeff;padding:10px;border-radius:10px}
-  .checks strong{color:#065f46}
-  .pill{display:inline-block;padding:3px 8px;border-radius:999px;background:#f1f5f9;color:#0f172a;font-size:12px;margin-left:6px}
+  
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+    color: var(--cinza-escuro);
+    line-height: 1.6;
+    min-height: 100vh;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+  }
+  
+  /* Header */
+  header {
+    background: linear-gradient(90deg, var(--verde-principal) 0%, var(--verde-claro) 100%);
+    color: var(--branco);
+    padding: 20px 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    border-radius: 0 0 15px 15px;
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-title h1 {
+    font-size: 1.8rem;
+    font-weight: 300;
+    letter-spacing: 1px;
+  }
+  
+  .header-title span {
+    font-size: 1rem;
+    opacity: 0.9;
+    display: block;
+    margin-top: 5px;
+  }
+  
+  /* Main Content */
+  main {
+    padding: 30px 0;
+  }
+  
+  .intro {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--verde-principal);
+  }
+  
+  .intro h2 {
+    color: var(--verde-escuro);
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    font-weight: 400;
+  }
+  
+  .intro p {
+    margin-bottom: 15px;
+    text-align: justify;
+    font-size: 1.05rem;
+  }
+  
+  .lead {
+    background: linear-gradient(135deg, var(--verde-pastel) 0%, var(--verde-limao) 100%);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--verde-claro);
+  }
+  
+  .lead h3 {
+    color: var(--verde-escuro);
+    margin-bottom: 10px;
+    font-size: 1.4rem;
+    font-weight: 500;
+  }
+  
+  /* Formulário de Cadastro */
+  .cadastro-form {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+  
+  .cadastro-form h3 {
+    color: var(--verde-escuro);
+    margin-bottom: 20px;
+    font-size: 1.4rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--verde-escuro);
+    font-size: 1.05rem;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid var(--verde-agua);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .form-group input:focus {
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    outline: none;
+  }
+  
+  .btn {
+    display: inline-block;
+    background: linear-gradient(90deg, var(--verde-principal) 0%, var(--verde-claro) 100%);
+    color: var(--branco);
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+
+  /* Botão secundário */
+  .btn-secondary {
+    background: linear-gradient(90deg, var(--azul-suave) 0%, #90CAF9 100%);
+  }
+  
+  .btn-secondary:hover {
+    background: linear-gradient(90deg, #42A5F5 0%, var(--azul-suave) 100%);
+  }
+  
+  /* Seções de Atividades */
+  .accordion {
+    margin-bottom: 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    background: var(--branco);
+  }
+  
+  .accordion-header {
+    background: linear-gradient(90deg, var(--verde-principal) 0%, var(--verde-claro) 100%);
+    color: var(--branco);
+    padding: 18px 20px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  
+  .accordion-header:hover {
+    background: linear-gradient(90deg, var(--verde-escuro) 0%, var(--verde-principal) 100%);
+  }
+  
+  .accordion-content {
+    background-color: var(--branco);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+  
+  .accordion.active .accordion-content {
+    max-height: 3000px;
+  }
+  
+  .accordion.active .accordion-header i {
+    transform: rotate(180deg);
+  }
+  
+  .accordion-header i {
+    transition: transform 0.3s;
+  }
+  
+  .activity-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 20px 15px;
+    padding: 20px;
+  }
+  
+  .activity-label {
+    font-weight: 500;
+    color: var(--cinza-escuro);
+  }
+  
+  .activity-meta {
+    font-size: 0.9rem;
+    color: var(--cinza-medio);
+    margin-top: 5px;
+  }
+  
+  .activity-input {
+    width: 100px;
+    padding: 10px;
+    border: 1px solid var(--verde-agua);
+    border-radius: 8px;
+    text-align: right;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .activity-input:focus {
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+    outline: none;
+  }
+  
+  .nucleo {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-left: 8px;
+  }
+  
+  .nucleo-i {
+    background-color: rgba(33, 150, 243, 0.15);
+    color: var(--azul-suave);
+  }
+  
+  .nucleo-ii {
+    background-color: rgba(156, 39, 176, 0.15);
+    color: #9C27B0;
+  }
+  
+  .semestre {
+    color: var(--laranja-suave);
+    font-weight: 600;
+  }
+  
+  /* Progresso */
+  .progress-container {
+    background: var(--branco);
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+  }
+  
+  .progress-bar {
+    height: 35px;
+    background-color: var(--verde-pastel);
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--verde-principal) 0%, var(--verde-claro) 100%);
+    width: 0%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    transition: width 0.6s ease;
+    border-radius: 20px;
+  }
+  
+  .status-message {
+    margin-bottom: 20px;
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  
+  .checks {
+    background: linear-gradient(135deg, var(--verde-pastel) 0%, var(--verde-limao) 100%);
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 5px solid var(--verde-claro);
+  }
+  
+  .checks div {
+    margin-bottom: 12px;
+    font-size: 1.05rem;
+  }
+  
+  .checks strong {
+    color: var(--verde-escuro);
+  }
+  
+  /* Footer */
+  footer {
+    background: linear-gradient(90deg, var(--verde-escuro) 0%, var(--verde-principal) 100%);
+    color: var(--branco);
+    padding: 25px 0;
+    margin-top: 40px;
+    border-radius: 15px 15px 0 0;
+    text-align: center;
+  }
+  
+  .footer-content {
+    font-size: 1rem;
+    opacity: 0.9;
+  }
+  
+  /* Responsivo */
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      text-align: center;
+    }
+    
+    .activity-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .activity-input {
+      width: 100%;
+    }
+  }
+  
+  /* Animações */
+  @keyframes flash {
+    0% { background-color: #ffebee; border-color: #ef9a9a; }
+    100% { background-color: white; }
+  }
+  
+  .flash {
+    animation: flash 0.65s ease;
+  }
+  
+  /* Mensagens */
+  .message {
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-weight: 500;
+  }
+  
+  .message-success {
+    background-color: rgba(76, 175, 80, 0.15);
+    color: var(--verde-escuro);
+    border: 1px solid var(--verde-agua);
+  }
+  
+  .message-error {
+    background-color: rgba(244, 67, 54, 0.15);
+    color: #D32F2F;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+  }
+  
+  /* Botão flutuante para WhatsApp */
+  .whatsapp-button {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: all 0.3s ease;
+  }
+  
+  .whatsapp-button:hover {
+    transform: scale(1.1);
+  }
+  
+  /* Ícones decorativos */
+  .icon-decoration {
+    position: absolute;
+    opacity: 0.05;
+    z-index: -1;
+  }
+  
+  .icon-1 {
+    top: 10%;
+    left: 5%;
+    font-size: 120px;
+    color: var(--verde-principal);
+  }
+  
+  .icon-2 {
+    bottom: 15%;
+    right: 5%;
+    font-size: 150px;
+    color: var(--verde-claro);
+  }
+
+  /* Botões de ação */
+  .action-buttons {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
 </style>
 </head>
 <body>
-<h1>📊 Simulador de Atividades Complementares (ACCs)</h1>
+  <!-- Ícones decorativos -->
+  <i class="fas fa-graduation-cap icon-decoration icon-1"></i>
+  <i class="fas fa-calculator icon-decoration icon-2"></i>
 
-<div class="intro">
-  A <b>Resolução nº 5191/2025 – CEPE</b> estabelece as normas das Atividades Curriculares Complementares (ACCs) no 
-  <b>Curso de Matemática da UECE</b>, exigindo que cada estudante cumpra, ao longo da graduação, um 
-  mínimo de <b>204 horas</b> (equivalentes a <b>12 créditos</b>). Essas atividades complementam a formação acadêmica, científica, cultural e social, 
-  contribuindo para uma formação integral e para o desenvolvimento das competências necessárias ao exercício profissional e à cidadania.
-  <br><br>
-  É essencial que os alunos acompanhem continuamente o seu progresso, respeitem os limites máximos por atividade e por semestre, e mantenham em dia a 
-  documentação comprobatória exigida. O descumprimento dessas exigências pode comprometer a conclusão do curso.
-</div>
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="header-content">
+        <div class="header-title">
+          <h1>Universidade Estadual do Ceará</h1>
+          <span>Sistema de Atividades Complementares</span>
+        </div>
+        <div>
+          <span>Curso: Matemática</span>
+        </div>
+      </div>
+    </div>
+  </header>
 
-<p class="lead">
-  Meta do curso: <b>204h (12 créditos)</b>. Distribua em pelo menos <b>2 grupos (A–F)</b> e em <b>2 atividades distintas</b>.
-</p>
+  <!-- Main Content -->
+  <main class="container">
+    <div class="intro">
+      <h2>Simulador de Atividades Complementares (ACCs)</h2>
+      <p>A <b>Resolução nº 5191/2025 – CEPE</b> estabelece as normas das Atividades Curriculares Complementares (ACCs) no <b>Curso de Matemática da UECE</b>, exigindo que cada estudante cumpra, ao longo da graduação, um mínimo de <b>204 horas</b> (equivalentes a <b>12 créditos</b>). Essas atividades complementam a formação acadêmica, científica, cultural e social, contribuindo para uma formação integral e para o desenvolvimento das competências necessárias ao exercício profissional e à cidadania.</p>
+      <p>É essencial que os alunos acompanhem continuamente o seu progresso, respeitem os limites máximos por atividade e por semestre, e mantenham em dia a documentação comprobatória exigida. O descumprimento dessas exigências pode comprometer a conclusão do curso.</p>
+    </div>
 
-<!-- ============================ A ============================ -->
-<details open>
-  <summary>(A) Complementação da formação específica/campo profissional</summary>
-  <div class="grid">
-    <label for="a1">Cursos de complementação — <span class="meta">20h/atividade · <b>máx. 60h</b></span></label>
-    <input type="number" id="a1" min="0" max="60" data-summax="60" value="0" />
-    <label for="a2">Curso de curta duração (área específica) — <span class="meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span></span></label>
-    <input type="number" id="a2" min="0" max="40" data-summax="40" value="0" />
-    <label for="a3">Oficina na área específica — <span class="meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span></span></label>
-    <input type="number" id="a3" min="0" max="40" data-summax="40" value="0" />
-  </div>
-</details>
+    <div class="lead">
+      <h3>Meta do curso</h3>
+      <p><b>204 horas (12 créditos)</b>. Distribua em pelo menos <b>2 grupos (A–F)</b> e em <b>2 atividades distintas</b>.</p>
+    </div>
 
-<!-- ============================ B ============================ -->
-<details>
-  <summary>(B) Ensino</summary>
-  <div class="grid">
-    <label for="b1">Monitoria acadêmica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="b1" min="0" max="100" data-summax="100" value="0" />
-    <label for="b2">PIBID — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="b2" min="0" max="100" data-summax="100" value="0" />
-    <label for="b3">Residência Pedagógica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="b3" min="0" max="100" data-summax="100" value="0" />
-    <label for="b4">Produção de material didático — <span class="meta"><b>máx. 60h</b></span></label>
-    <input type="number" id="b4" min="0" max="60" data-summax="60" value="0" />
-    <label for="b5">Ministrar oficinas/cursos — <span class="meta"><b>máx. 60h</b></span></label>
-    <input type="number" id="b5" min="0" max="60" data-summax="60" value="0" />
-    <label for="b6">Docência em espaços formais/não formais — <span class="meta"><b>máx. 40h</b></span></label>
-    <input type="number" id="b6" min="0" max="40" data-summax="40" value="0" />
-    <label for="b7">Estágio em laboratório de ensino — <span class="meta"><b>máx. 60h</b></span></label>
-    <input type="number" id="b7" min="0" max="60" data-summax="60" value="0" />
-  </div>
-</details>
+    <!-- Formulário de Cadastro -->
+    <div class="cadastro-form">
+      <h3><i class="fas fa-user-plus"></i> Cadastro para Envio de Simulação</h3>
+      <div id="messageContainer"></div>
+      <form id="cadastroForm">
+        <div class="form-group">
+          <label for="nome">Nome Completo:</label>
+          <input type="text" id="nome" name="nome" required>
+        </div>
+        <div class="form-group">
+          <label for="email">E-mail institucional(xxx.xxx@aluno.uece.br):</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="matricula">Matrícula:</label>
+          <input type="text" id="matricula" name="matricula" required>
+        </div>
+        <div class="form-group">
+       <!--<button type="submit" class="btn">Salvar e Enviar Simulação</button>-->
+        </div>
+      </form>
+    </div>
 
-<!-- ============================ C ============================ -->
-<details>
-  <summary>(C) Pesquisa e Produção Científica</summary>
-  <div class="grid">
-    <label for="c1">Iniciação científica — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="c1" min="0" max="100" data-summax="100" value="0" />
-    <label for="c2">Pesquisa em projetos — <span class="meta"><b>máx. 80h</b> <span class="semestre">(máx. 40h/semestre)</span></span></label>
-    <input type="number" id="c2" min="0" max="80" data-summax="80" value="0" />
-    <label for="c3">Grupo de estudo — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="c3" min="0" max="60" data-summax="60" value="0" />
-    <!-- demais atividades sem limite semestral -->
-  </div>
-</details>
+    <!-- Seção A -->
+    <div class="accordion active">
+      <div class="accordion-header">
+        <span>(A) Complementação da formação específica/campo profissional</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Cursos de complementação</label>
+            <div class="activity-meta">20h/atividade · <b>máx. 60h</b> <span class="nucleo nucleo-ii">Núcleo II</span></div>
+          </div>
+          <input type="number" class="activity-input" id="a1" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Curso de curta duração (área específica)</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="a2" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Oficina na área específica</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 40h</b> <span class="semestre">(máx. 20h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="a3" min="0" max="40" data-summax="40" value="0" />
+        </div>
+      </div>
+    </div>
 
-<!-- ============================ D ============================ -->
-<details>
-  <summary>(D) Atividades Gerais</summary>
-  <div class="grid">
-    <label for="d1">Programa PET — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="d1" min="0" max="100" data-summax="100" value="0" />
-    <label for="d2">Cursos de formação geral — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="d2" min="0" max="60" data-summax="60" value="0" />
-    <label for="d3">Cursos de TIC — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="d3" min="0" max="60" data-summax="60" value="0" />
-    <label for="d4">Cursos de línguas — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="d4" min="0" max="60" data-summax="60" value="0" />
-    <label for="d6">Estágio não obrigatório — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="d6" min="0" max="60" data-summax="60" value="0" />
-  </div>
-</details>
+    <!-- Seção B -->
+    <div class="accordion">
+      <div class="accordion-header">
+        <span>(B) Ensino</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Monitoria acadêmica</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b1" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">PIBID</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b2" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Residência Pedagógica</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b3" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Produção de material didático</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b4" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Ministrar oficinas/cursos</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b5" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Docência em espaços formais/não formais</label>
+            <div class="activity-meta"><b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b6" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Estágio em laboratório de ensino</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="b7" min="0" max="60" data-summax="60" value="0" />
+        </div>
+      </div>
+    </div>
 
-<!-- ============================ E ============================ -->
-<details>
-  <summary>(E) Extensão</summary>
-  <div class="grid">
-    <label for="e1">Projetos/Programas de Extensão — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="e1" min="0" max="100" data-summax="100" value="0" />
-    <label for="e2">Liga acadêmica/empresa júnior — <span class="meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span></span></label>
-    <input type="number" id="e2" min="0" max="50" data-summax="50" value="0" />
-    <!-- demais atividades sem limite semestral -->
-  </div>
-</details>
+    <!-- Seção C -->
+    <div class="accordion">
+      <div class="accordion-header">
+        <span>(C) Pesquisa e Produção Científica</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Iniciação científica</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c1" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Pesquisa em projetos</label>
+            <div class="activity-meta"><b>máx. 80h</b> <span class="semestre">(máx. 40h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c2" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Grupo de estudo</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c3" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Apresentação de trabalhos em eventos científicos</label>
+            <div class="activity-meta">8h/atividade · <b>máx. 48h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c4" min="0" max="48" data-summax="48" value="0" />
+          
+          <div>
+            <label class="activity-label">Prêmio acadêmico, artístico or cultural</label>
+            <div class="activity-meta">15h/atividade · <b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c5" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Trabalhos completos publicados em anais</label>
+            <div class="activity-meta">20h/atividade · <b>máx. 80h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c6" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de livros de divulgação científica com ISBN</label>
+            <div class="activity-meta">20h/atividade · <b>máx. 80h</b> <span class="nucleo nucleo-ii">Núcleo II</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c7" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de capítulo de livros com ISBN</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 50h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c8" min="0" max="50" data-summax="50" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de livros na área de conhecimento</label>
+            <div class="activity-meta">15h/atividade · <b>máx. 60h</b> <span class="nucleo nucleo-ii">Núcleo II</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c9" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Resumos em Congressos Científicos locais</label>
+            <div class="activity-meta">4h/atividade · <b>máx. 20h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c10" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Resumos em Congressos Científicos regionais</label>
+            <div class="activity-meta">6h/atividade · <b>máx. 30h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c11" min="0" max="30" data-summax="30" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Resumos em Congressos Científicos nacionais</label>
+            <div class="activity-meta">8h/atividade · <b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c12" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Resumos em Congressos Científicos internacionais</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c13" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Artigos em revistas locais</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 50h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c14" min="0" max="50" data-summax="50" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Artigos em revistas nacionais</label>
+            <div class="activity-meta">15h/atividade · <b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c15" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Artigos em revistas internacionais</label>
+            <div class="activity-meta">20h/atividade · <b>máx. 80h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c16" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Artigos de divulgação científica em revista especializada</label>
+            <div class="activity-meta">5h/atividade · <b>máx. 20h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c17" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Publicação de Artigos de divulgação científica em jornais</label>
+            <div class="activity-meta">25h/semestre · <b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c18" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Estágio em laboratório de pesquisa</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="c19" min="0" max="100" data-summax="100" value="0" />
+        </div>
+      </div>
+    </div>
 
-<!-- ============================ F ============================ -->
-<details>
-  <summary>(F) Esportivas e Culturais</summary>
-  <div class="grid">
-    <label for="f1">Projetos de iniciação artística — <span class="meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span></span></label>
-    <input type="number" id="f1" min="0" max="100" data-summax="100" value="0" />
-    <label for="f2">Atleta em jogos universitários — <span class="meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span></span></label>
-    <input type="number" id="f2" min="0" max="50" data-summax="50" value="0" />
-    <label for="f3">Treinador de equipes esportivas — <span class="meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span></span></label>
-    <input type="number" id="f3" min="0" max="60" data-summax="60" value="0" />
-    <!-- demais atividades sem limite semestral -->
-  </div>
-</details>
+    <!-- Seção D -->
+    <div class="accordion">
+      <div class="accordion-header">
+        <span>(D) Atividades Gerais</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Programa PET</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d1" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Cursos de formação geral</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d2" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Cursos de TIC</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d3" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Cursos de línguas</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d4" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em eventos</label>
+            <div class="activity-meta">4h/evento · <b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d5" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Estágio não obrigatório</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d6" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Catalogação de documentos</label>
+            <div class="activity-meta"><b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d7" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação como representante estudantil</label>
+            <div class="activity-meta"><b>máx. 20h</b> <span class="semestre">(máx. 20h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d8" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação como representante estudantil de Centro Acadêmico</label>
+            <div class="activity-meta"><b>máx. 20h</b> <span class="semestre">(máx. 20h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d9" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Bolsista PBEPU</label>
+            <div class="activity-meta"><b>máx. 80h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d10" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação no ENADE</label>
+            <div class="activity-meta">8h <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d11" min="0" max="8" data-summax="8" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação efetiva em trabalho voluntário</label>
+            <div class="activity-meta"><b>máx. 80h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d12" min="0" max="80" data-summax="80" value="0" />
+          
+          <div>
+            <label class="activity-label">Doação voluntária de sangue</label>
+            <div class="activity-meta">5h/doação <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d13" min="0" max="5" data-summax="5" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação como mesário ou auxiliar nas eleições</label>
+            <div class="activity-meta">30h/Turno de Eleição <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d14" min="0" max="30" data-summax="30" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em processos de fiscalização</label>
+            <div class="activity-meta">2h/10h <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d15" min="0" max="10" data-summax="10" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em comissões avaliadoras</label>
+            <div class="activity-meta">2h/10h <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="d16" min="0" max="10" data-summax="10" value="0" />
+        </div>
+      </div>
+    </div>
 
-<!-- PROGRESSO -->
-<div class="bar-wrap">
-  <div class="bar" id="progressBar">0h</div>
-</div>
-<p class="note" id="status"></p>
-<div class="checks" id="checksBox">
-  <div>• Total: <strong id="totalHoras">0h</strong> / 204h</div>
-  <div>• Grupos distintos (A–F) com horas > 0: <strong id="qtGrupos">0</strong> (mín. 2)</div>
-  <div>• Atividades diferentes com horas > 0: <strong id="qtAtiv">0</strong> (mín. 2)</div>
-</div>
+    <!-- Seção E -->
+    <div class="accordion">
+      <div class="accordion-header">
+        <span>(E) Extensão</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Projetos/Programas de Extensão</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e1" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Liga acadêmica/empresa júnior</label>
+            <div class="activity-meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e2" min="0" max="50" data-summax="50" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em curso de extensão</label>
+            <div class="activity-meta">10h/atividade · <b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e3" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em comissões organizadoras de eventos</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e4" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em campanhas de saúde pública</label>
+            <div class="activity-meta"><b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e5" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em campanhas de educação ambiental</label>
+            <div class="activity-meta"><b>máx. 40h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e6" min="0" max="40" data-summax="40" value="0" />
+          
+          <div>
+            <label class="activity-label">Organização de grupos de incentivo à leitura</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="e7" min="0" max="60" data-summax="60" value="0" />
+        </div>
+      </div>
+    </div>
 
-<script>
-(function(){
-  const meta = 204;
-  const inputs = Array.from(document.querySelectorAll('input[type="number"]'));
-  const bar = document.getElementById('progressBar');
-  const status = document.getElementById('status');
-  const totalHoras = document.getElementById('totalHoras');
-  const qtGrupos = document.getElementById('qtGrupos');
-  const qtAtiv = document.getElementById('qtAtiv');
+    <!-- Seção F -->
+    <div class="accordion">
+      <div class="accordion-header">
+        <span>(F) Esportivas e Culturais</span>
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="accordion-content">
+        <div class="activity-grid">
+          <div>
+            <label class="activity-label">Projetos de iniciação artística</label>
+            <div class="activity-meta"><b>máx. 100h</b> <span class="semestre">(máx. 50h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f1" min="0" max="100" data-summax="100" value="0" />
+          
+          <div>
+            <label class="activity-label">Atleta em jogos universitários</label>
+            <div class="activity-meta"><b>máx. 50h</b> <span class="semestre">(máx. 25h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f2" min="0" max="50" data-summax="50" value="0" />
+          
+          <div>
+            <label class="activity-label">Treinador de equipes esportivas</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="semestre">(máx. 30h/semestre)</span> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f3" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Produção of filmes, vídeos ou audiovisuais</label>
+            <div class="activity-meta"><b>máx. 50h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f4" min="0" max="50" data-summax="50" value="0" />
+          
+          <div>
+            <label class="activity-label">Direção de peça, vídeo ou audiovisual</label>
+            <div class="activity-meta"><b>máx. 60h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f5" min="0" max="60" data-summax="60" value="0" />
+          
+          <div>
+            <label class="activity-label">Mostras de artes plásticas</label>
+            <div class="activity-meta"><b>máx. 20h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f6" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Composição musical</label>
+            <div class="activity-meta"><b>máx. 20h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f7" min="0" max="20" data-summax="20" value="0" />
+          
+          <div>
+            <label class="activity-label">Participação em grupo artístico da UECE</label>
+            <div class="activity-meta"><b>máx. 20h</b> <span class="nucleo nucleo-i">Núcleo I</span></div>
+          </div>
+          <input type="number" class="activity-input" id="f8" min="0" max="20" data-summax="20" value="0" />
+        </div>
+      </div>
+    </div>
 
-  inputs.forEach(inp=>{
-    inp.addEventListener('input', ()=>{
-      const max = Number(inp.dataset.summax || inp.max || 0);
-      let v = Number(inp.value || 0);
-      if(v > max){
-        inp.value = max;
-        flash(inp);
-      }else if(v < 0){
-        inp.value = 0;
+    <!-- Progresso -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressBar">0h</div>
+      </div>
+      <div class="status-message" id="status"></div>
+      <div class="checks">
+        <div>• Total: <strong id="totalHoras">0h</strong> / 204h</div>
+        <div>• Grupos distintos (A–F) com horas > 0: <strong id="qtGrupos">0</strong> (mín. 2)</div>
+        <div>• Atividades diferentes com horas > 0: <strong id="qtAtiv">0</strong> (mín. 2)</div>
+        <div>• Núcleos distintos (I e II) com horas > 0: <strong id="qtNucleos">0</strong> (mín. 1)</div>
+      </div>
+      
+      <!-- Botão para gerar PDF -->
+      <div class="action-buttons">
+        <button id="btnGerarPDF" class="btn btn-secondary">
+          <i class="fas fa-file-pdf"></i> Gerar Relatório em PDF
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Botão WhatsApp -->
+  <a href="https://wa.me/5585988887777?text=Olá! Tenho dúvidas sobre o Simulador de ACCs do curso de Matemática da UECE." class="whatsapp-button" target="_blank">
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <div class="footer-content">
+        <p>&copy; 2025 Universidade Estadual do Ceará. Todos os direitos reservados.</p>
+        <p>Coordenação do Curso de Matemática: matematica@uece.br</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const meta = 204;
+      const inputs = Array.from(document.querySelectorAll('.activity-input'));
+      const bar = document.getElementById('progressBar');
+      const status = document.getElementById('status');
+      const totalHoras = document.getElementById('totalHoras');
+      const qtGrupos = document.getElementById('qtGrupos');
+      const qtAtiv = document.getElementById('qtAtiv');
+      const qtNucleos = document.getElementById('qtNucleos');
+      const accordions = document.querySelectorAll('.accordion');
+      const cadastroForm = document.getElementById('cadastroForm');
+      const messageContainer = document.getElementById('messageContainer');
+      const btnGerarPDF = document.getElementById('btnGerarPDF');
+
+      // Mapeamento de núcleos para cada atividade
+      const nucleosMap = {
+        'a1': 'II', 'a2': 'I', 'a3': 'I',
+        'b1': 'I', 'b2': 'I', 'b3': 'I', 'b4': 'I', 'b5': 'I', 'b6': 'I', 'b7': 'I',
+        'c1': 'I', 'c2': 'I', 'c3': 'I', 'c4': 'I', 'c5': 'I', 'c6': 'I', 'c7': 'II', 'c8': 'I', 'c9': 'II', 
+        'c10': 'I', 'c11': 'I', 'c12': 'I', 'c13': 'I', 'c14': 'I', 'c15': 'I', 'c16': 'I', 'c17': 'I', 'c18': 'I', 'c19': 'I',
+        'd1': 'I', 'd2': 'I', 'd3': 'I', 'd4': 'I', 'd5': 'I', 'd6': 'I', 'd7': 'I', 'd8': 'I', 'd9': 'I', 
+        'd10': 'I', 'd11': 'I', 'd12': 'I', 'd13': 'I', 'd14': 'I', 'd15': 'I', 'd16': 'I',
+        'e1': 'I', 'e2': 'I', 'e3': 'I', 'e4': 'I', 'e5': 'I', 'e6': 'I', 'e7': 'I',
+        'f1': 'I', 'f2': 'I', 'f3': 'I', 'f4': 'I', 'f5': 'I', 'f6': 'I', 'f7': 'I', 'f8': 'I'
+      };
+
+      // Mapeamento de descrições para cada atividade
+      const descricoesAtividades = {
+        'a1': 'Cursos de complementação',
+        'a2': 'Curso de curta duração (área específica)',
+        'a3': 'Oficina na área específica',
+        'b1': 'Monitoria acadêmica',
+        'b2': 'PIBID',
+        'b3': 'Residência Pedagógica',
+        'b4': 'Produção de material didático',
+        'b5': 'Ministrar oficinas/cursos',
+        'b6': 'Docência em espaços formais/não formais',
+        'b7': 'Estágio em laboratório de ensino',
+        'c1': 'Iniciação científica',
+        'c2': 'Pesquisa em projetos',
+        'c3': 'Grupo de estudo',
+        'c4': 'Apresentação de trabalhos em eventos científicos',
+        'c5': 'Prêmio acadêmico, artístico ou cultural',
+        'c6': 'Trabalhos completos publicados em anais',
+        'c7': 'Publicação de livros de divulgação científica com ISBN',
+        'c8': 'Publicação de capítulo de livros com ISBN',
+        'c9': 'Publicação de livros na área de conhecimento',
+        'c10': 'Publicação de Resumos em Congressos Científicos locais',
+        'c11': 'Publicação de Resumos em Congressos Científicos regionais',
+        'c12': 'Publicação de Resumos em Congressos Científicos nacionais',
+        'c13': 'Publicação de Resumos em Congressos Científicos internacionais',
+        'c14': 'Publicação de Artigos em revistas locais',
+        'c15': 'Publicação de Artigos em revistas nacionais',
+        'c16': 'Publicação de Artigos em revistas internacionais',
+        'c17': 'Publicação de Artigos de divulgação científica em revista especializada',
+        'c18': 'Publicação de Artigos de divulgação científica em jornais',
+        'c19': 'Estágio em laboratório de pesquisa',
+        'd1': 'Programa PET',
+        'd2': 'Cursos de formação geral',
+        'd3': 'Cursos de TIC',
+        'd4': 'Cursos de línguas',
+        'd5': 'Participação em eventos',
+        'd6': 'Estágio não obrigatório',
+        'd7': 'Catalogação de documentos',
+        'd8': 'Participação como representante estudantil',
+        'd9': 'Participação como representante estudantil de Centro Acadêmico',
+        'd10': 'Bolsista PBEPU',
+        'd11': 'Participação no ENADE',
+        'd12': 'Participação efetiva em trabalho voluntário',
+        'd13': 'Doação voluntária de sangue',
+        'd14': 'Participação como mesário ou auxiliar nas eleições',
+        'd15': 'Participação em processos de fiscalização',
+        'd16': 'Participação em comissões avaliadoras',
+        'e1': 'Projetos/Programas de Extensão',
+        'e2': 'Liga acadêmica/empresa júnior',
+        'e3': 'Participação em curso de extensão',
+        'e4': 'Participação em comissões organizadoras de eventos',
+        'e5': 'Participação em campanhas de saúde pública',
+        'e6': 'Participação em campanhas de educação ambiental',
+        'e7': 'Organização de grupos de incentivo à leitura',
+        'f1': 'Projetos de iniciação artística',
+        'f2': 'Atleta em jogos universitários',
+        'f3': 'Treinador de equipes esportivas',
+        'f4': 'Produção de filmes, vídeos ou audiovisuais',
+        'f5': 'Direção de peça, vídeo ou audiovisual',
+        'f6': 'Mostras de artes plásticas',
+        'f7': 'Composição musical',
+        'f8': 'Participação em grupo artístico da UECE'
+      };
+
+      // Função para mostrar mensagens
+      function showMessage(message, type) {
+        messageContainer.innerHTML = `<div class="message message-${type}">${message}</div>`;
+        setTimeout(() => {
+          messageContainer.innerHTML = '';
+        }, 5000);
       }
+
+      // Event listeners para accordions
+      accordions.forEach(accordion => {
+        const header = accordion.querySelector('.accordion-header');
+        header.addEventListener('click', () => {
+          accordion.classList.toggle('active');
+        });
+      });
+
+      // Event listeners para inputs
+      inputs.forEach(inp => {
+        inp.addEventListener('input', () => {
+          const max = Number(inp.dataset.summax || inp.max || 0);
+          let v = Number(inp.value || 0);
+          if (v > max) {
+            inp.value = max;
+            flash(inp);
+          } else if (v < 0) {
+            inp.value = 0;
+          }
+          atualizar();
+        });
+      });
+
+      // Função de animação flash
+      function flash(el) {
+        el.classList.remove('flash');
+        void el.offsetWidth;
+        el.classList.add('flash');
+      }
+
+      // Função para atualizar o progresso
+      function atualizar() {
+        let total = 0;
+        const grupos = new Set();
+        const nucleos = new Set();
+        let atividadesComHoras = 0;
+
+        inputs.forEach(inp => {
+          const val = Number(inp.value || 0);
+          if (val > 0) {
+            atividadesComHoras++;
+            grupos.add(inp.id[0].toUpperCase());
+            nucleos.add(nucleosMap[inp.id] || 'I');
+          }
+          total += val;
+        });
+
+        const pct = Math.min(100, (total / meta) * 100);
+        bar.style.width = pct + '%';
+        bar.textContent = Math.round(total) + 'h';
+        bar.style.background = total >= meta
+          ? 'linear-gradient(90deg,var(--verde-principal),var(--verde-claro))'
+          : 'linear-gradient(90deg,#FF7043,#FF9800)';
+
+        totalHoras.textContent = Math.round(total) + 'h';
+        qtGrupos.textContent = grupos.size;
+        qtAtiv.textContent = atividadesComHoras;
+        qtNucleos.textContent = nucleos.size;
+
+        const okHoras = total >= meta;
+        const okGrupos = grupos.size >= 2;
+        const okAtiv = atividadesComHoras >= 2;
+
+        const msgs = [];
+        if (!okHoras) msgs.push('Some mais horas até atingir a meta de 204h.');
+        if (!okGrupos) msgs.push('Distribua em pelo menos 2 grupos (A–F).');
+        if (!okAtiv) msgs.push('Inclua pelo menos 2 atividades diferentes.');
+        status.textContent = msgs.length ? '⚠️ ' + msgs.join(' ') : '✅ Requisitos atendidos.';
+        status.style.color = msgs.length ? '#FF5722' : 'var(--verde-escuro)';
+      }
+
+      // Função para coletar dados do formulário
+      function collectFormData() {
+        const formData = {
+          nome: document.getElementById('nome').value,
+          email: document.getElementById('email').value,
+          matricula: document.getElementById('matricula').value,
+          atividades: {},
+          totalHoras: 0,
+          grupos: new Set(),
+          nucleos: new Set(),
+          atividadesComHoras: 0,
+          data: new Date().toLocaleDateString('pt-BR')
+        };
+
+        inputs.forEach(inp => {
+          const val = Number(inp.value || 0);
+          if (val > 0) {
+            formData.atividades[inp.id] = val;
+            formData.totalHoras += val;
+            formData.atividadesComHoras++;
+            formData.grupos.add(inp.id[0].toUpperCase());
+            formData.nucleos.add(nucleosMap[inp.id] || 'I');
+          }
+        });
+
+        return formData;
+      }
+
+      // Função para enviar dados por e-mail (simulação)
+      function sendEmail(data) {
+        // Em um ambiente real, isso seria feito com backend
+        // Aqui simulamos o envio com localStorage e mensagem de sucesso
+        
+        // Salvar no localStorage
+        localStorage.setItem('accSimulacao_' + data.matricula, JSON.stringify(data));
+        
+        // Mensagem de sucesso
+        showMessage('Sua simulação foi salva com sucesso! Um e-mail foi enviado para você e para a coordenação do curso.', 'success');
+        
+        // Simular envio de e-mail
+        console.log('E-mail enviado para:', data.email);
+        console.log('E-mail enviado para: matematica@uece.br');
+        console.log('Dados da simulação:', data);
+      }
+
+      // Função para gerar PDF
+      function gerarPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        
+        // Coletar dados
+        const formData = collectFormData();
+        
+        // Configurações iniciais
+        const margin = 15;
+        let y = margin;
+        
+        // Cabeçalho
+        doc.setFillColor(76, 175, 80);
+        doc.rect(0, 0, 220, 30, 'F');
+        doc.setFontSize(18);
+        doc.setTextColor(255, 255, 255);
+        doc.text('UNIVERSIDADE ESTADUAL DO CEARÁ', 105, 12, { align: 'center' });
+        doc.setFontSize(12);
+        doc.text('Relatório de Atividades Complementares (ACCs)', 105, 20, { align: 'center' });
+        
+        y = 40;
+        doc.setTextColor(0, 0, 0);
+        doc.setFontSize(12);
+        
+        // Dados do aluno
+        doc.setFont(undefined, 'bold');
+        doc.text('DADOS DO ALUNO', margin, y);
+        y += 8;
+        doc.setFont(undefined, 'normal');
+        doc.text(`Nome: ${formData.nome}`, margin, y);
+        y += 7;
+        doc.text(`Matrícula: ${formData.matricula}`, margin, y);
+        y += 7;
+        doc.text(`E-mail: ${formData.email}`, margin, y);
+        y += 7;
+        doc.text(`Data da simulação: ${formData.data}`, margin, y);
+        y += 12;
+        
+        // Resumo das horas
+        doc.setFont(undefined, 'bold');
+        doc.text('RESUMO DAS HORAS', margin, y);
+        y += 8;
+        doc.setFont(undefined, 'normal');
+        doc.text(`Total de horas: ${formData.totalHoras}h / 204h`, margin, y);
+        y += 7;
+        doc.text(`Grupos distintos com horas: ${formData.grupos.size} (mín. 2)`, margin, y);
+        y += 7;
+        doc.text(`Atividades diferentes: ${formData.atividadesComHoras} (mín. 2)`, margin, y);
+        y += 7;
+        doc.text(`Núcleos distintos: ${formData.nucleos.size} (mín. 1)`, margin, y);
+        y += 12;
+        
+        // Análise de conformidade
+        doc.setFont(undefined, 'bold');
+        doc.text('ANÁLISE DE CONFORMIDADE', margin, y);
+        y += 8;
+        doc.setFont(undefined, 'normal');
+        
+        const conformidade = [];
+        if (formData.totalHoras >= 204) {
+          conformidade.push('✓ Meta de 204h atingida');
+        } else {
+          conformidade.push(`✗ Faltam ${204 - formData.totalHoras}h para atingir a meta`);
+        }
+        
+        if (formData.grupos.size >= 2) {
+          conformidade.push('✓ Mínimo de 2 grupos atendido');
+        } else {
+          conformidade.push('✗ Mínimo de 2 grupos não atendido');
+        }
+        
+        if (formData.atividadesComHoras >= 2) {
+          conformidade.push('✓ Mínimo de 2 atividades atendido');
+        } else {
+          conformidade.push('✗ Mínimo de 2 atividades não atendido');
+        }
+        
+        if (formData.nucleos.size >= 1) {
+          conformidade.push('✓ Mínimo de 1 núcleo atendido');
+        } else {
+          conformidade.push('✗ Mínimo de 1 núcleo não atendido');
+        }
+        
+        // Adicionar itens de conformidade
+        conformidade.forEach(item => {
+          if (y > 250) {
+            doc.addPage();
+            y = margin;
+          }
+          doc.text(item, margin, y);
+          y += 7;
+        });
+        
+        y += 10;
+        
+        // Detalhamento das atividades
+        if (Object.keys(formData.atividades).length > 0) {
+          if (y > 220) {
+            doc.addPage();
+            y = margin;
+          }
+          
+          doc.setFont(undefined, 'bold');
+          doc.text('DETALHAMENTO DAS ATIVIDADES', margin, y);
+          y += 10;
+          
+          // Cabeçalho da tabela
+          doc.setFillColor(200, 230, 201);
+          doc.rect(margin, y, 170, 8, 'F');
+          doc.setTextColor(0, 0, 0);
+          doc.setFontSize(10);
+          doc.text('Grupo', margin + 2, y + 5);
+          doc.text('Atividade', margin + 25, y + 5);
+          doc.text('Horas', margin + 160, y + 5);
+          y += 8;
+          
+          // Dados da tabela
+          doc.setFont(undefined, 'normal');
+          Object.keys(formData.atividades).forEach(id => {
+            if (y > 270) {
+              doc.addPage();
+              y = margin;
+              // Cabeçalho da tabela em nova página
+              doc.setFillColor(200, 230, 201);
+              doc.rect(margin, y, 170, 8, 'F');
+              doc.setTextColor(0, 0, 0);
+              doc.setFontSize(10);
+              doc.text('Grupo', margin + 2, y + 5);
+              doc.text('Atividade', margin + 25, y + 5);
+              doc.text('Horas', margin + 160, y + 5);
+              y += 8;
+            }
+            
+            const grupo = id[0].toUpperCase();
+            const descricao = descricoesAtividades[id] || id;
+            const horas = formData.atividades[id];
+            
+            doc.text(grupo, margin + 2, y + 5);
+            doc.text(descricao.substring(0, 50), margin + 25, y + 5);
+            doc.text(horas.toString(), margin + 160, y + 5);
+            y += 6;
+          });
+        }
+        
+        // Rodapé
+        const totalPages = doc.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+          doc.setPage(i);
+          doc.setFontSize(10);
+          doc.setTextColor(100, 100, 100);
+          doc.text(`Página ${i} de ${totalPages}`, 105, 285, { align: 'center' });
+          doc.text('Relatório gerado pelo Simulador de ACCs - Matemática/UECE', 105, 290, { align: 'center' });
+        }
+        
+        // Salvar PDF
+        doc.save(`ACC_Simulacao_${formData.matricula}.pdf`);
+        
+        showMessage('Relatório em PDF gerado com sucesso!', 'success');
+      }
+
+      // Event listener para o formulário de cadastro
+      cadastroForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const formData = collectFormData();
+        
+        if (formData.totalHoras === 0) {
+          showMessage('Por favor, insira pelo menos uma atividade antes de enviar.', 'error');
+          return;
+        }
+        
+        sendEmail(formData);
+      });
+
+      // Event listener para o botão de gerar PDF
+      btnGerarPDF.addEventListener('click', () => {
+        const formData = collectFormData();
+        
+        if (formData.totalHoras === 0) {
+          showMessage('Por favor, insira pelo menos uma atividade antes de gerar o relatório.', 'error');
+          return;
+        }
+        
+        gerarPDF();
+      });
+
+      // Inicializar
       atualizar();
-    });
-  });
-
-  function flash(el){
-    el.classList.remove('flash');
-    void el.offsetWidth;
-    el.classList.add('flash');
-  }
-
-  function atualizar(){
-    let total = 0;
-    const grupos = new Set();
-    let atividadesComHoras = 0;
-
-    inputs.forEach(inp=>{
-      const val = Number(inp.value || 0);
-      if(val>0){
-        atividadesComHoras++;
-        grupos.add(inp.id[0].toUpperCase());
-      }
-      total += val;
-    });
-
-    const pct = Math.min(100, (total/meta)*100);
-    bar.style.width = pct + '%';
-    bar.textContent = Math.round(total) + 'h';
-    bar.style.background = total >= meta
-      ? 'linear-gradient(90deg,#15803d,#4ade80)'
-      : 'linear-gradient(90deg,#c62828,#ef5350)';
-
-    totalHoras.textContent = Math.round(total)+'h';
-    qtGrupos.textContent = grupos.size;
-    qtAtiv.textContent = atividadesComHoras;
-
-    const okHoras = total >= meta;
-    const okGrupos = grupos.size >= 2;
-    const okAtiv = atividadesComHoras >= 2;
-
-    const msgs = [];
-    if(!okHoras) msgs.push('Some mais horas até atingir a meta de 204h.');
-    if(!okGrupos) msgs.push('Distribua em pelo menos 2 grupos (A–F).');
-    if(!okAtiv) msgs.push('Inclua pelo menos 2 atividades diferentes.');
-    status.textContent = msgs.length ? '⚠️ ' + msgs.join(' ') : '✅ Requisitos atendidos.';
-    status.style.color = msgs.length ? '#9a3412' : '#14532d';
-  }
-
-  atualizar();
-})();
-</script>
+    })();
+  </script>
 </body>
 </html>
